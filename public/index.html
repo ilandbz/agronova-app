@@ -48,14 +48,12 @@
     .chip{ background:#e7f5ee; color:#1a684e; border-radius:999px; padding:.2rem .6rem; font-size:.8rem; }
     /* Mejora de tap targets */
     .tap{ padding:.9rem 1.1rem; border-radius:.8rem; }
-    .logo-full {
+.logo-full {
   width: 100%;
   height: auto;
   max-height: 120px; /* puedes ajustar la altura si el logo es muy alto */
   object-fit: contain;
 }
-
-
 /* Botón flotante inferior centrado */
 .home-fab {
   position: fixed;
@@ -75,14 +73,8 @@
   box-shadow: 0 10px 30px rgba(0,0,0,.18);
   text-decoration: none;
 }
-
-/* Tocar cómodo en móvil */
 .home-fab i { font-size: 1.6rem; }
-
-/* Evitar que el botón tape el contenido al hacer scroll */
 body { padding-bottom: 96px; }
-
-/* (Opcional) Ocultar la barra inferior antigua */
 .bottom-nav { display: none; }
 
 
@@ -118,7 +110,7 @@ body { padding-bottom: 96px; }
 
         <!-- Menú 2 -->
         <div class="col-12">
-          <button class="w-100 text-start menu-card tap bg-white" onclick="go('precios')">
+          <a href="precios.html" class="w-100 text-start menu-card tap bg-white text-decoration-none d-block">
             <div class="d-flex align-items-center gap-3 p-3">
               <i class="bi bi-cash-coin h3 mb-0 text-success"></i>
               <div>
@@ -127,7 +119,7 @@ body { padding-bottom: 96px; }
               </div>
               <i class="bi bi-chevron-right ms-auto"></i>
             </div>
-          </button>
+          </a>
         </div>
 
         <div class="col-12">
@@ -184,11 +176,75 @@ body { padding-bottom: 96px; }
         <div class="col-7">
           <label class="form-label small">Cultivo</label>
           <select id="sel-cultivo" class="form-select">
-            <option>Maíz</option>
-            <option>Café</option>
-            <option>Arroz</option>
-            <option>Trigo</option>
-            <option>Frijol</option>
+            <option selected disabled>Selecciona un producto agrícola</option>
+            <option>ACELGA</option>
+            <option>AJI</option>
+            <option>AJO</option>
+            <option>ALBAHACA</option>
+            <option>ALCACHOFA</option>
+            <option>APIO</option>
+            <option>ARVEJA</option>
+            <option>BERENJENA</option>
+            <option>BETERRAGA</option>
+            <option>CAIGUA</option>
+            <option>CALABAZA</option>
+            <option>CAMOTE</option>
+            <option>CEBADA</option>
+            <option>CEBOLLA</option>
+            <option>COL</option>
+            <option>COLIFLOR</option>
+            <option>CHOCLO</option>
+            <option>ESPARRAGO</option>
+            <option>ESPINACA</option>
+            <option>FREJOL</option>
+            <option>GARBANZO</option>
+            <option>HABA</option>
+            <option>HIERBA BUENA</option>
+            <option>HORTALIZAS CHINAS</option>
+            <option>HUACATAY</option>
+            <option>LECHUGA</option>
+            <option>LENTEJA</option>
+            <option>LIMON</option>
+            <option>MAIZ</option>
+            <option>MANI</option>
+            <option>NABO</option>
+            <option>OREGANO</option>
+            <option>OLLUCO</option>
+            <option>OCA</option>
+            <option>PALLAR</option>
+            <option>PAPA</option>
+            <option>PEPINILLO</option>
+            <option>PEREJIL</option>
+            <option>PIMIENTO</option>
+            <option>PORO</option>
+            <option>QUINUA</option>
+            <option>RABANITO</option>
+            <option>SORGO</option>
+            <option>SOYA</option>
+            <option>TOMATE</option>
+            <option>TRIGO</option>
+            <option>VAINITA</option>
+            <option>YUCA</option>
+            <option>ZANAHORIA</option>
+            <option>ZAPALLO</option>
+            <option>OTROS PROD.AGRIC.</option>
+            <option>PRODUCTO NO IDENTI</option>
+            <option>PROD.OTRO MERCADO</option>
+            <option>GRANADILLA</option>
+            <option>MANGO</option>
+            <option>MANZANA</option>
+            <option>MARACUYA</option>
+            <option>NARANJA</option>
+            <option>PIÑA</option>
+            <option>PALTA</option>
+            <option>PAPAYA</option>
+            <option>TORONJA</option>
+            <option>OTROS</option>
+            <option>COCOS</option>
+            <option>ALFALFA</option>
+            <option>MANDARINA</option>
+            <option>MELON</option>
+            <option>GUANABANA</option>
           </select>
         </div>
         <div class="col-5 d-grid">
@@ -228,25 +284,7 @@ body { padding-bottom: 96px; }
 
   </main>
 
-  <!-- Navegación inferior rápida -->
-  <nav class="bottom-nav py-2">
-    <div class="container">
-      <div class="d-flex justify-content-around text-center">
-        <button class="btn btn-link" onclick="go('clima')">
-          <i class="bi bi-cloud-sun h5 mb-0"></i><div class="small">Clima</div>
-        </button>
-        <button class="btn btn-link" onclick="go('precios')">
-          <i class="bi bi-cash-coin h5 mb-0"></i><div class="small">Precios</div>
-        </button>
-        <button class="btn btn-link" onclick="go('consejos')">
-          <i class="bi bi-seedling h5 mb-0"></i><div class="small">Consejos</div>
-        </button>
-        <button class="btn btn-link" onclick="go('home')">
-          <i class="bi bi-house h5 mb-0"></i><div class="small">Inicio</div>
-        </button>
-      </div>
-    </div>
-  </nav>
+
 
   <!-- Bootstrap JS (opcional para algunos componentes) -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
