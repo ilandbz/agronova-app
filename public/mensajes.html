@@ -141,7 +141,20 @@
   top: -20px;
   left: 0;
 }
-
+#mensaje-card {
+  animation: fadeIn 1s ease;
+}
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.spin i {
+  animation: spin 1s linear infinite;
+}
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
   </style>
 </head>
 <body>
@@ -153,14 +166,14 @@
     </header>
 
   <main>
-    <div class="iframe-card">
-      <iframe
-        title="Power BI - Canasta Básica"
-        src="https://app.powerbi.com/view?r=eyJrIjoiZTEwOGNjODItYWJjMS00ZDQ2LTllMWQtYjE5MjVmNWQ4NTZiIiwidCI6IjdmMDg0NjI3LTdmNDAtNDg3OS04OTE3LTk0Yjg2ZmQzNWYzZiJ9"
-        loading="lazy"
-        allowfullscreen
-        referrerpolicy="strict-origin-when-cross-origin">
-      </iframe>
+    <div id="mensaje-card" class="text-center p-4 bg-white shadow rounded-4" style="max-width:700px;">
+      <h3 class="fw-bold text-success mb-3">
+        <i class="fa-solid fa-seedling"></i> Consejo Agrícola del Día
+      </h3>
+      <p id="mensaje-texto" class="fs-5 text-secondary mb-3">Cargando consejo...</p>
+      <button id="btn-refresh" class="btn btn-success btn-sm px-4">
+        <i class="fa-solid fa-rotate"></i> Otro consejo
+      </button>
     </div>
   </main>
 
@@ -169,6 +182,32 @@
   </footer>
   <a href="index.html" class="home-fab" aria-label="Ir al inicio" role="button">
   <i class="bi bi-house-fill"></i>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  const mensajeTexto = document.getElementById("mensaje-texto");
+  const btnRefresh = document.getElementById("btn-refresh");
 
+  async function cargarMensaje() {
+    mensajeTexto.textContent = "🌾 Obteniendo consejo...";
+    try {
+      const res = await fetch("https://tuservidor.test/controles"); // 🔹 Cambia a tu dominio real
+      const data = await res.json();
+      mensajeTexto.textContent = data.mensaje || "No hay consejos disponibles.";
+    } catch (error) {
+      mensajeTexto.textContent = "Error al conectar con el servidor.";
+      console.error(error);
+    }
+  }
+
+  // Cargar al iniciar
+  cargarMensaje();
+
+  // Cargar nuevo mensaje al hacer clic
+  btnRefresh.addEventListener("click", () => {
+    btnRefresh.classList.add("spin");
+    cargarMensaje().then(() => btnRefresh.classList.remove("spin"));
+  });
+});
+</script>
 </body>
 </html>

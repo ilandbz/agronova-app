@@ -79,7 +79,9 @@
 
   <!-- App bar -->
     <header class="app-bar brand-grad py-3 px-3 mb-3 text-center">
-    <img src="logo.png" alt="AgroNova" class="logo-full img-fluid" />
+  <img src="logo.png" alt="AgroNova" 
+       class="rounded-circle border border-3 border-light shadow p-4 bg-white" 
+       width="200" height="200">
     </header>
 
   <!-- Contenedor principal -->
@@ -118,16 +120,16 @@
         </div>
 
         <div class="col-12">
-            <button class="w-100 text-start menu-card tap bg-white" onclick="go('consejos')">
-                <div class="d-flex align-items-center gap-3 p-3">
-                <i class="fa-solid fa-lightbulb h3 mb-0 text-success"></i>
-                <div>
-                    <div class="fw-semibold">Consejos agrícolas</div>
-                    <small class="text-muted">Buenas prácticas y guías</small>
-                </div>
-                <i class="bi bi-chevron-right ms-auto"></i>
-                </div>
-            </button>
+            <a href="mensajes.html" class="w-100 text-start menu-card tap bg-white text-decoration-none d-block">
+              <div class="d-flex align-items-center gap-3 p-3">
+              <i class="fa-solid fa-lightbulb h3 mb-0 text-success"></i>
+              <div>
+                  <div class="fw-semibold">Consejos agrícolas</div>
+                  <small class="text-muted">Buenas prácticas y guías</small>
+              </div>
+              <i class="bi bi-chevron-right ms-auto"></i>
+              </div>
+            </a>
         </div>
       </div>
     </section>
