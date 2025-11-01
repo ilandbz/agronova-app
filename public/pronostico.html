@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Pronóstico Meteorológico - Agronova</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+
+  <!-- Bootstrap Icons -->
+  <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
+    rel="stylesheet"
+  />
+
+<link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+      crossorigin="anonymous" referrerpolicy="no-referrer">
+
+  <meta name="theme-color" content="#0a7c59" />
+
+
+
+  <style>
+    body { background: #f2f7fa; padding: 20px 10px; }
+    .city-card {
+      background: white;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      padding: 15px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      scroll-margin-top: 80px; /* espacio para el buscador fijo */
+    }
+    .city-header {
+      background: #0078d7;
+      color: white;
+      padding: 10px;
+      border-radius: 5px;
+      margin-bottom: 10px;
+    }
+    .day-row {
+      border-bottom: 1px solid #eee;
+      padding: 8px 0;
+    }
+    /* Buscador fijo arriba */
+    #search-container {
+      position: sticky;
+      top: 0;
+      background: #f2f7fa;
+      padding: 10px 0 15px;
+      z-index: 1000;
+    }
+    /* Botón flotante inferior centrado */
+.home-fab {
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: 16px;                 /* fallback */
+  bottom: calc(env(safe-area-inset-bottom, 0px) + 16px); /* iOS notch */
+  z-index: 1100;
+  width: 64px;
+  height: 64px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #0a7c59;
+  color: #fff;
+  box-shadow: 0 10px 30px rgba(0,0,0,.18);
+  text-decoration: none;
+}
+
+  </style>
+</head>
+<body>
+
+  <div class="container">
+
+    <h1 class="text-center mb-4">🌤️ Pronóstico Meteorológico (SENAMHI)</h1>
+
+    <div id="search-container" class="mb-3">
+      <input
+        type="search"
+        id="searchInput"
+        class="form-control"
+        placeholder="Buscar ciudad..."
+        aria-label="Buscar ciudad"
+      />
+    </div>
+
+    <div id="contenedor"></div>
+  </div>
+
+  <script>
+    let ciudadesData = [];
+
+    async function cargarPronostico() {
+      const contenedor = document.getElementById('contenedor');
+      contenedor.innerHTML = "<p class='text-center text-muted'>Cargando pronóstico...</p>";
+
+      try {
+        const res = await fetch("/api/pronostico");
+        const data = await res.json();
+        ciudadesData = data;
+
+        renderizarCiudades(ciudadesData);
+      } catch (err) {
+        contenedor.innerHTML = `<p class="text-danger text-center">Error al cargar datos</p>`;
+        console.error(err);
+      }
+    }
+
+    function renderizarCiudades(data) {
+      const contenedor = document.getElementById('contenedor');
+      contenedor.innerHTML = "";
+
+      if (data.length === 0) {
+        contenedor.innerHTML = `<p class="text-center text-muted">No se encontraron ciudades.</p>`;
+        return;
+      }
+
+      data.forEach(ciudad => {
+        const card = document.createElement("div");
+        card.className = "city-card";
+        card.id = `ciudad-${ciudad.ciudad.toLowerCase().replace(/\s+/g, '-')}`; // id para scroll
+        card.innerHTML = `
+          <div class="city-header"><h4>${ciudad.ciudad}</h4></div>
+          ${ciudad.pronostico.map(d => `
+            <div class="day-row row align-items-center">
+              <div class="col-5 col-md-3"><strong>${d.fecha}</strong></div>
+              <div class="col-2 text-danger">${d.max}</div>
+              <div class="col-2 text-primary">${d.min}</div>
+              <div class="col-3 col-md-5">${d.descripcion}</div>
+            </div>
+          `).join("")}
+        `;
+        contenedor.appendChild(card);
+      });
+    }
+
+    // Filtrar y hacer scroll a ciudad
+    document.getElementById('searchInput').addEventListener('input', e => {
+      const query = e.target.value.trim().toLowerCase();
+
+      if (!query) {
+        // Si está vacío, mostrar todas
+        renderizarCiudades(ciudadesData);
+        return;
+      }
+
+      const filtradas = ciudadesData.filter(c => c.ciudad.toLowerCase().includes(query));
+      renderizarCiudades(filtradas);
+
+      // Scroll suave a la primera ciudad que coincida
+      if (filtradas.length > 0) {
+        const primeraId = `ciudad-${filtradas[0].ciudad.toLowerCase().replace(/\s+/g, '-')}`;
+        const elemento = document.getElementById(primeraId);
+        if (elemento) {
+          elemento.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      }
+    });
+
+    cargarPronostico();
+  </script>
+  <a href="index.html" class="home-fab" aria-label="Ir al inicio" role="button">
+  <i class="bi bi-house-fill"></i>
+</body>
+</html>

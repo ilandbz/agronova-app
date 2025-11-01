@@ -1,0 +1,24 @@
+{
+
+  "name": "agronova-app",
+
+  "version": "1.0.0",
+
+  "type": "module",
+
+  "main": "scrapper.js",
+
+  "dependencies": {
+
+    "cheerio": "^1.0.0",
+
+    "express": "^5.1.0",
+
+    "node-fetch": "^3.3.2",
+
+    "puppeteer": "^24.27.0"
+
+  }
+
+}
+

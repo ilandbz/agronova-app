@@ -1,0 +1,342 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>AgroNova</title>
+
+  <!-- Bootstrap 5 -->
+  <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+    integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+    crossorigin="anonymous"
+  />
+  <!-- Bootstrap Icons -->
+  <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
+    rel="stylesheet"
+  />
+
+<link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+      crossorigin="anonymous" referrerpolicy="no-referrer">
+
+  <meta name="theme-color" content="#0a7c59" />
+  <style>
+    :root{ --brand:#0a7c59; }
+    body{ background:#f7faf8; }
+    .brand-grad{
+      background: linear-gradient(135deg, #0a7c59, #3bb273);
+      color:#fff;
+    }
+    .app-bar{
+      position: sticky; top:0; z-index: 1020;
+      border-bottom-left-radius: 1rem; border-bottom-right-radius: 1rem;
+    }
+    .menu-card{
+      border:0; border-radius:1rem; box-shadow:0 8px 24px rgba(0,0,0,.06);
+      transition: transform .06s ease-in-out;
+    }
+    .menu-card:active{ transform: scale(.98); }
+    .hidden{ display:none !important; }
+    .bottom-nav{
+      position:sticky; bottom:0; z-index:1020; border-top-left-radius:1rem; border-top-right-radius:1rem;
+      background:#fff; box-shadow:0 -6px 24px rgba(0,0,0,.08);
+    }
+    .logo{ height:40px; }
+    .chip{ background:#e7f5ee; color:#1a684e; border-radius:999px; padding:.2rem .6rem; font-size:.8rem; }
+    /* Mejora de tap targets */
+    .tap{ padding:.9rem 1.1rem; border-radius:.8rem; }
+    .logo-full {
+  width: 100%;
+  height: auto;
+  max-height: 120px; /* puedes ajustar la altura si el logo es muy alto */
+  object-fit: contain;
+}
+
+
+/* Botón flotante inferior centrado */
+.home-fab {
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: 16px;                 /* fallback */
+  bottom: calc(env(safe-area-inset-bottom, 0px) + 16px); /* iOS notch */
+  z-index: 1100;
+  width: 64px;
+  height: 64px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #0a7c59;
+  color: #fff;
+  box-shadow: 0 10px 30px rgba(0,0,0,.18);
+  text-decoration: none;
+}
+
+/* Tocar cómodo en móvil */
+.home-fab i { font-size: 1.6rem; }
+
+/* Evitar que el botón tape el contenido al hacer scroll */
+body { padding-bottom: 96px; }
+
+/* (Opcional) Ocultar la barra inferior antigua */
+.bottom-nav { display: none; }
+
+
+  </style>
+</head>
+<body>
+
+  <!-- App bar -->
+    <header class="app-bar brand-grad py-3 px-3 mb-3 text-center">
+    <img src="logo.png" alt="AgroNova" class="logo-full img-fluid" />
+    </header>
+
+  <!-- Contenedor principal -->
+  <main class="container pb-5" id="app">
+
+    <!-- Home -->
+    <section id="view-home">
+      <div class="row g-3">
+
+        <!-- Menú 1 -->
+        <div class="col-12">
+          <a href="pronostico.html" class="w-100 text-start menu-card tap bg-white text-decoration-none d-block">
+            <div class="d-flex align-items-center gap-3 p-3">
+              <i class="bi bi-cloud-sun h3 mb-0 text-success"></i>
+              <div>
+                <div class="fw-semibold text-dark">Alerta climática</div>
+                <small class="text-muted">Pronóstico y avisos para tu zona</small>
+              </div>
+              <i class="bi bi-chevron-right ms-auto"></i>
+            </div>
+          </a>
+        </div>
+
+        <!-- Menú 2 -->
+        <div class="col-12">
+          <button class="w-100 text-start menu-card tap bg-white" onclick="go('precios')">
+            <div class="d-flex align-items-center gap-3 p-3">
+              <i class="bi bi-cash-coin h3 mb-0 text-success"></i>
+              <div>
+                <div class="fw-semibold">Precios de mercado</div>
+                <small class="text-muted">Referencias por cultivo</small>
+              </div>
+              <i class="bi bi-chevron-right ms-auto"></i>
+            </div>
+          </button>
+        </div>
+
+        <div class="col-12">
+            <button class="w-100 text-start menu-card tap bg-white" onclick="go('consejos')">
+                <div class="d-flex align-items-center gap-3 p-3">
+                <i class="fa-solid fa-lightbulb h3 mb-0 text-success"></i>
+                <div>
+                    <div class="fw-semibold">Consejos agrícolas</div>
+                    <small class="text-muted">Buenas prácticas y guías</small>
+                </div>
+                <i class="bi bi-chevron-right ms-auto"></i>
+                </div>
+            </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Alerta climática -->
+    <section id="view-clima" class="hidden">
+      <button class="btn btn-link ps-0 mb-2" onclick="go('home')"><i class="bi bi-arrow-left"></i> Volver</button>
+      <h2 class="h5 mb-3">Alerta climática</h2>
+
+      <form class="row g-2 mb-3" onsubmit="event.preventDefault(); simularClima();">
+        <div class="col-8">
+          <input id="inp-ubicacion" class="form-control" placeholder="Ej: Tunja, Boyacá" />
+        </div>
+        <div class="col-4 d-grid">
+          <button class="btn btn-success"><i class="bi bi-search"></i> Buscar</button>
+        </div>
+      </form>
+
+      <div id="clima-card" class="card menu-card hidden">
+        <div class="card-body">
+          <div class="d-flex align-items-center gap-3">
+            <i id="clima-icon" class="bi bi-cloud-drizzle h2 mb-0"></i>
+            <div>
+              <div class="fw-semibold" id="clima-titulo">—</div>
+              <div class="small text-muted" id="clima-sub">—</div>
+            </div>
+            <span class="chip ms-auto" id="clima-chip">—</span>
+          </div>
+        </div>
+      </div>
+
+      <p class="text-muted mt-3">*Datos de ejemplo (sin conexión a APIs). Puedes conectar aquí tu servicio de clima cuando lo tengas.</p>
+    </section>
+
+    <!-- Precios de mercado -->
+    <section id="view-precios" class="hidden">
+      <button class="btn btn-link ps-0 mb-2" onclick="go('home')"><i class="bi bi-arrow-left"></i> Volver</button>
+      <h2 class="h5 mb-3">Precios de mercado</h2>
+
+      <div class="row g-2 align-items-end">
+        <div class="col-7">
+          <label class="form-label small">Cultivo</label>
+          <select id="sel-cultivo" class="form-select">
+            <option>Maíz</option>
+            <option>Café</option>
+            <option>Arroz</option>
+            <option>Trigo</option>
+            <option>Frijol</option>
+          </select>
+        </div>
+        <div class="col-5 d-grid">
+          <button class="btn btn-success" onclick="simularPrecios()">
+            <i class="bi bi-graph-up-arrow"></i> Ver precio
+          </button>
+        </div>
+      </div>
+
+      <div id="precios-card" class="card menu-card mt-3 hidden">
+        <div class="card-body">
+          <div class="d-flex align-items-center gap-3">
+            <i class="bi bi-currency-dollar h3 mb-0"></i>
+            <div>
+              <div class="fw-semibold" id="precio-valor">—</div>
+              <div class="small text-muted" id="precio-fuente">Referencia nacional</div>
+            </div>
+            <span class="chip ms-auto" id="precio-variacion">—</span>
+          </div>
+        </div>
+      </div>
+
+      <p class="text-muted mt-3">*Valores de demostración. Reemplaza con tu API de precios cuando esté lista.</p>
+    </section>
+
+    <!-- Consejos agrícolas -->
+    <section id="view-consejos" class="hidden">
+      <button class="btn btn-link ps-0 mb-2" onclick="go('home')"><i class="bi bi-arrow-left"></i> Volver</button>
+      <h2 class="h5 mb-3">Consejos agrícolas</h2>
+
+      <input id="inp-buscar-consejo" class="form-control mb-3" placeholder="Buscar por palabra clave (riego, suelo, plagas…)" oninput="filtrarConsejos()" />
+
+      <div id="lista-consejos" class="vstack gap-2">
+        <!-- Rellenado por JS -->
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Navegación inferior rápida -->
+  <nav class="bottom-nav py-2">
+    <div class="container">
+      <div class="d-flex justify-content-around text-center">
+        <button class="btn btn-link" onclick="go('clima')">
+          <i class="bi bi-cloud-sun h5 mb-0"></i><div class="small">Clima</div>
+        </button>
+        <button class="btn btn-link" onclick="go('precios')">
+          <i class="bi bi-cash-coin h5 mb-0"></i><div class="small">Precios</div>
+        </button>
+        <button class="btn btn-link" onclick="go('consejos')">
+          <i class="bi bi-seedling h5 mb-0"></i><div class="small">Consejos</div>
+        </button>
+        <button class="btn btn-link" onclick="go('home')">
+          <i class="bi bi-house h5 mb-0"></i><div class="small">Inicio</div>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Bootstrap JS (opcional para algunos componentes) -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+          crossorigin="anonymous"></script>
+
+  <script>
+    // ------- Navegación sencilla (SPA) -------
+    const views = {
+      home: document.getElementById('view-home'),
+      clima: document.getElementById('view-clima'),
+      precios: document.getElementById('view-precios'),
+      consejos: document.getElementById('view-consejos'),
+    };
+    function go(v){
+      Object.values(views).forEach(el => el.classList.add('hidden'));
+      (views[v] || views.home).classList.remove('hidden');
+      window.scrollTo({ top:0, behavior:'smooth' });
+      // Guardar última vista
+      localStorage.setItem('agro_view', v);
+    }
+    // Restaurar vista previa
+    go(localStorage.getItem('agro_view') || 'home');
+
+    // ------- Clima (demo sin API) -------
+    const climaCard = document.getElementById('clima-card');
+    function simularClima(){
+      const ubic = document.getElementById('inp-ubicacion').value.trim() || 'Tu ubicación';
+      localStorage.setItem('agro_ubic', ubic);
+      document.getElementById('clima-titulo').textContent = `Posible lluvia en ${ubic}`;
+      document.getElementById('clima-sub').textContent = 'Viento moderado • Humedad alta';
+      document.getElementById('clima-chip').textContent = 'Alerta amarilla';
+      document.getElementById('clima-icon').className = 'bi bi-cloud-rain h2 mb-0';
+      climaCard.classList.remove('hidden');
+    }
+    // Rellenar ubicación guardada
+    document.getElementById('inp-ubicacion').value = localStorage.getItem('agro_ubic') || '';
+
+    // ------- Precios (demo sin API) -------
+    const preciosCard = document.getElementById('precios-card');
+    function simularPrecios(){
+      const cultivo = document.getElementById('sel-cultivo').value;
+      // Generamos un precio aleatorio para demo
+      const base = { 'Maíz': 760, 'Café': 1350, 'Arroz': 520, 'Trigo': 680, 'Frijol': 950 }[cultivo] || 700;
+      const variacion = (Math.random()*10 - 5).toFixed(1); // -5% a +5%
+      const precio = (base * (1 + variacion/100)).toFixed(0);
+      document.getElementById('precio-valor').textContent = `${cultivo}: $${precio} / qq`;
+      document.getElementById('precio-variacion').textContent = `${variacion}%`;
+      document.getElementById('precio-variacion').className = 'chip ms-auto ' + (variacion>=0 ? '' : '');
+      preciosCard.classList.remove('hidden');
+    }
+
+    // ------- Consejos (data local) -------
+    const DATA_CONSEJOS = [
+      { t:'Riego', d:'Riega temprano en la mañana para reducir evaporación.' },
+      { t:'Suelo', d:'Añade materia orgánica para mejorar la retención de agua.' },
+      { t:'Plagas', d:'Monitorea con trampas amarillas y rota cultivos.' },
+      { t:'Fertilización', d:'Haz análisis de suelo antes de aplicar fertilizantes.' },
+      { t:'Cosecha', d:'Cosecha en horas frescas para preservar calidad.' },
+      { t:'Malezas', d:'Usa acolchado (mulch) para reducir malezas y conservar humedad.' },
+    ];
+    const contLista = document.getElementById('lista-consejos');
+    function renderConsejos(items){
+      contLista.innerHTML = '';
+      items.forEach(({t,d})=>{
+        const card = document.createElement('div');
+        card.className = 'card menu-card';
+        card.innerHTML = `
+          <div class="card-body">
+            <div class="d-flex align-items-start gap-3">
+              <i class="bi bi-lightbulb h4 mb-0 text-success"></i>
+              <div>
+                <div class="fw-semibold">${t}</div>
+                <div class="small text-muted">${d}</div>
+              </div>
+            </div>
+          </div>`;
+        contLista.appendChild(card);
+      });
+    }
+    function filtrarConsejos(){
+      const q = document.getElementById('inp-buscar-consejo').value.toLowerCase().trim();
+      const filtrados = DATA_CONSEJOS.filter(c => (c.t+c.d).toLowerCase().includes(q));
+      renderConsejos(filtrados);
+    }
+    renderConsejos(DATA_CONSEJOS);
+  </script>
+
+  <a href="index.html" class="home-fab" aria-label="Ir al inicio" role="button">
+  <i class="bi bi-house-fill"></i>
+</a>
+</body>
+</html>
