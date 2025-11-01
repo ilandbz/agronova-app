@@ -190,7 +190,7 @@ document.addEventListener("DOMContentLoaded", function() {
   async function cargarMensaje() {
     mensajeTexto.textContent = "🌾 Obteniendo consejo...";
     try {
-      const res = await fetch("https://tuservidor.test/controles"); // 🔹 Cambia a tu dominio real
+      const res = await fetch("https://integrity.macrocompany.net.pe/api/mensajes"); // 🔹 Cambia a tu dominio real
       const data = await res.json();
       mensajeTexto.textContent = data.mensaje || "No hay consejos disponibles.";
     } catch (error) {
