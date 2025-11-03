@@ -129,3 +129,21 @@ app.listen(PORT, () => {
   console.log(`📄 Dashboard: http://localhost:${PORT}/`);
   console.log(`🌦️ Pronóstico: http://localhost:${PORT}/pronostico.html`);
 });
+
+
+// --- Iniciar servidor ---
+// OJO: guardamos la referencia del server y escuchamos eventos
+/*const server = app.listen(PORT, () => {
+  console.log(`🌐 Servidor disponible en: http://localhost:${PORT}`);
+  console.log(`📄 Dashboard: http://localhost:${PORT}/`);
+  console.log(`🌦️ Pronóstico: http://localhost:${PORT}/pronostico.html`);
+});*/
+
+// Log de eventos por si algo lo cierra
+server.on('close', () => console.error('🛑 server.close() fue llamado'));
+server.on('error', (err) => console.error('❌ server error:', err));
+process.on('SIGINT',  () => { console.warn('SIGINT');  /* no cerramos */ });
+process.on('SIGTERM', () => { console.warn('SIGTERM'); /* no cerramos */ });
+
+// Mantener una referencia fuerte (defensivo)
+global.__serverRef = server;
