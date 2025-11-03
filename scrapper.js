@@ -21,7 +21,6 @@ async function obtenerPronostico() {
   const browser = await puppeteer.launch({
     headless: true,
     args: ["--no-sandbox", "--disable-setuid-sandbox"]
-    // Si despliegas en host con Chrome ya instalado:
     // executablePath: process.env.PUPPETEER_EXECUTABLE_PATH
   });
 
@@ -31,20 +30,22 @@ async function obtenerPronostico() {
       waitUntil: "networkidle2",
       timeout: 60000
     });
-    await page.waitForSelector("table");
+
+    // (1) Espera flexible: si cambia la vista, no revienta
+    await page.waitForSelector("table, tbody.buscar", { timeout: 30000 });
 
     const data = await page.evaluate(() => {
       const ciudades = [];
       const bloques = document.querySelectorAll("tbody.buscar > tr > td");
       bloques.forEach(bloque => {
-        const ciudad = bloque.querySelector(".nameCity a")?.innerText.trim();
+        const ciudad = bloque.querySelector(".nameCity a")?.innerText?.trim();
         const dias = [];
         const pronos = bloque.querySelectorAll(".row.m-3");
         pronos.forEach(row => {
-          const fecha = row.querySelector(".col-sm-3")?.innerText.trim();
-          const max = row.querySelector(".text-danger")?.innerText.trim();
-          const min = row.querySelector(".text-primary")?.innerText.trim();
-          const descripcion = row.querySelector(".col-sm-6")?.innerText.trim();
+          const fecha = row.querySelector(".col-sm-3")?.innerText?.trim();
+          const max = row.querySelector(".text-danger")?.innerText?.trim();
+          const min = row.querySelector(".text-primary")?.innerText?.trim();
+          const descripcion = row.querySelector(".col-sm-6")?.innerText?.trim();
           dias.push({ fecha, max, min, descripcion });
         });
         if (ciudad) ciudades.push({ ciudad, pronostico: dias });
@@ -120,30 +121,21 @@ app.get("/health", (_req, res) => {
   res.json({ ok: true, ts: Date.now() });
 });
 
-// --- Pre-warm de caché al iniciar (no bloquea el arranque) ---
-getCachedData({ force: false }).catch(() => { /* ignorar al inicio */ });
-
 // --- Iniciar servidor ---
-app.listen(PORT, () => {
+// (3) Guardamos la referencia y logueamos si se cierra
+const server = app.listen(PORT, () => {
   console.log(`🌐 Servidor disponible en: http://localhost:${PORT}`);
   console.log(`📄 Dashboard: http://localhost:${PORT}/`);
   console.log(`🌦️ Pronóstico: http://localhost:${PORT}/pronostico.html`);
 });
-
-
-// --- Iniciar servidor ---
-// OJO: guardamos la referencia del server y escuchamos eventos
-/*const server = app.listen(PORT, () => {
-  console.log(`🌐 Servidor disponible en: http://localhost:${PORT}`);
-  console.log(`📄 Dashboard: http://localhost:${PORT}/`);
-  console.log(`🌦️ Pronóstico: http://localhost:${PORT}/pronostico.html`);
-});*/
-
-// Log de eventos por si algo lo cierra
-server.on('close', () => console.error('🛑 server.close() fue llamado'));
-server.on('error', (err) => console.error('❌ server error:', err));
-process.on('SIGINT',  () => { console.warn('SIGINT');  /* no cerramos */ });
-process.on('SIGTERM', () => { console.warn('SIGTERM'); /* no cerramos */ });
-
-// Mantener una referencia fuerte (defensivo)
+server.on("close", () => console.error("🛑 server.close() fue llamado"));
+server.on("error", (err) => console.error("❌ server error:", err));
 global.__serverRef = server;
+
+// --- Pre-warm de caché al iniciar (no bloquea el arranque) ---
+// (2) Lo movemos a setImmediate y con logs de error
+setImmediate(() => {
+  getCachedData({ force: false })
+    .then(() => console.log("🔥 Cache precalentada"))
+    .catch((e) => console.error("⚠️ Falló pre-warm (ignorado):", e));
+});
